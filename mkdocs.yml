@@ -1,0 +1,6 @@
+site_name: Cute Care
+docs_dir: docs
+pages:
+    - 'Главная': 'index.md'
+    - 'Введение': 'Введение.md'
+    - 'Обзор рынка': 'Обзор рынка.md'
