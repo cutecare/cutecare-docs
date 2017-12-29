@@ -217,4 +217,4 @@ hall:
 
 После перезагрузки HASS он начнет опрашивать датчик один раз в час. Со временем вы получите примерно такой график:
 
-![График влажности](https://github.com/cutecare/cutecare-docs/blob/master/images/hass-ficus.jpeg)
+![График влажности](https://github.com/cutecare/cutecare-docs/blob/master/images/hass-ficus.jpeg?raw=true)
