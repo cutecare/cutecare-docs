@@ -77,7 +77,7 @@ void sendCommand(const char * data) {
 
 # Схема устройства
 
-![схема]()
+![схема](https://github.com/cutecare/cutecare-docs/blob/master/images/Relay-JDY-08_bb.png?raw=true)
 
 # Настройка HASS
 
