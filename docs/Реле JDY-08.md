@@ -111,4 +111,5 @@ hall:
 
 Для управления гирляндой используйте пиктограммы, расположенные рядом с "Новогодней ёлкой":
 
-![Управление ёлкой]()
+<img src="https://github.com/cutecare/cutecare-docs/blob/master/images/relay_jdy08.jpg?raw=true" width="400">
+
