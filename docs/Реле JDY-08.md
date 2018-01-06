@@ -130,7 +130,7 @@ hall:
     service: light.turn_off
     entity_id: light.christmas_tree
 
-- alias: 'Включить ёлочку с утра'
+- alias: 'Включить ёлочку утром'
   trigger:
     platform: time
     hours: 9
