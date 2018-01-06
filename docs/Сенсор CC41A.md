@@ -219,3 +219,39 @@ hall:
 После перезагрузки HASS он начнет опрашивать датчик один раз в час. Со временем вы получите примерно такой график:
 
 <img src="https://github.com/cutecare/cutecare-docs/blob/master/images/hass-ficus.jpeg?raw=true" width="400">
+
+## Автоматизация
+
+Самый простой способ отправить уведомление о необходимости полить растение - отправить письмо на электронный адрес. Есть масса других вариантов, например, push-уведомления на телефоне, но в этом случае потребуется установить доп. ПО на телефон.
+
+Файл: /config/configuration.yaml
+```
+binary_sensor:
+  - platform: template
+    sensors:
+      moisture_low:
+        value_template: '{{ states.sensor.plant1_moisture.state|int < 20 }}'
+        friendly_name: 'Необходимо полить растение'
+notify:
+  - name: email
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: youremail@gmail.com
+    encryption: starttls
+    username: youremail@gmail.com
+    password: *********
+    recipient:
+      - youremail@gmail.com
+    sender_name: Умная квартира
+alert:
+  low_moisture:
+    name: "Нужно полить растение"
+    entity_id: binary_sensor.moisture_low
+    repeat: 180
+    notifiers:
+      - email
+```
+
+Этими настройками мы создаем бинарный сенсор, который реагирует на достижение порогового значения влажности, измеряемого умным сенсором plant1_moisture. Также создаем канал уведомлений по почте с названием email. Правило "low_moisture" срабатывает при уровне влажности почвы < 20% и отправляет об этом уведомление на почту.
