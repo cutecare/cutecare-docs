@@ -113,3 +113,31 @@ hall:
 
 <img src="https://github.com/cutecare/cutecare-docs/blob/master/images/relay_jdy08.jpg?raw=true" width="400">
 
+## Автоматизация
+
+Чтобы гирлянда автоматически включалась утром (9:00) и выключалась на ночь (22:00), добавьте следующую автоматизацию:
+
+Файл: /config/automations.yaml
+```
+- alias: 'Выключить ёлочку на ночь'
+  trigger:
+    platform: time
+    hours: 22
+    minutes: 0
+    seconds: 0
+  condition: []
+  action:
+    service: light.turn_off
+    entity_id: light.christmas_tree
+
+- alias: 'Включить ёлочку с утра'
+  trigger:
+    platform: time
+    hours: 9
+    minutes: 0
+    seconds: 0
+  condition: []
+  action:
+    service: light.turn_on
+    entity_id: light.christmas_tree
+```
