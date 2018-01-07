@@ -141,3 +141,10 @@ hall:
     service: light.turn_on
     entity_id: light.christmas_tree
 ```
+
+# Ссылки
+
+1. [Адаптированная спецификация на модуль и прошивку в переводе с китайского](https://github.com/kichMan/JDY-08)
+2. [Оригинальная спецификация на модуль и прошивку (англ.)](https://fccid.io/2AM2YJDY-08/User-Manual/User-Manual-3511895.pdf)
+3. [Утилита для считывания параметров iBeacon](http://developer.radiusnetworks.com/ibeacon/idk/ibeacon_scan)
+4. [Описание формата данных iBeacon](https://kvurd.com/blog/tilt-hydrometer-ibeacon-data-format/)
