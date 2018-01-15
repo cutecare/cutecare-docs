@@ -16,8 +16,7 @@
 |Breadboard 170|Небольшая макетка для компоновки модулей датчика|30|
 |Держатель батареек 2x AAA|Питание датчика|80|
 
-Итоговая стоимость: 380 руб - это в два раза дешевле, чем скромный букет цветов.
-Также вам потребуются перемычки и любая имеющаяся Arduino, либо купите клон Aruino Nano для эмуляции USB-RS232 за 160 руб.
+Итоговая стоимость: 380 руб - это в два раза дешевле, чем скромный букет цветов. Также вам потребуются перемычки.
 
 # Характеристики устройства
 
@@ -31,66 +30,11 @@
 
 Вы также можете настроить удобные уведомления при превышении порогового значения влажности.
 
-В режиме ожидания сенсор потребляет 1мА, в режиме считывания уровня влажности - 16мА. Продолжительность считывания составляет около 3-4 секунд. Пары батареек AAA должно хватить почти на два месяца.
-
-CC41-A это конечно сложный случай и все из-за того, что его штатная прошивка не очень дружелюбна к нашей задаче.
-
-# Подготовка рабочего места
-
-Для программирования модулей вам потребуется установить Arduino IDE. Для программирования платы DigiSpark ATTiny85 нужно будет установить дополнительные драйверы и библиотеки, подробно это описано [здесь](http://digistump.com/wiki/digispark/tutorials/connecting), также советуем почитать об особенностях работы с этими модулями [здесь](https://medium.com/@evgeny.savitsky/%D0%BE%D1%81%D0%B2%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-attiny85-%D0%B8-lilypad-digispark-%D0%B2-%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%BE%D1%81%D1%82%D0%B8-c6e955957d53).
+В режиме ожидания сенсор потребляет 0.6мА, в режиме считывания уровня влажности - 12мА. Продолжительность считывания составляет около 2-х секунд. Считывание параметров осуществляется один раз в час. Пары батареек AAA должно хватить почти на два месяца.
 
 # Программирование модулей
 
-Для настройки BLE-модуля через Arduino подключите его к Arduino Nano по схеме описанной [здесь](http://cutecare.readthedocs.io/ru/master/%D0%AD%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B0%D0%B7%D0%B0/#_4). Загрузите в Arduino Nano программу:
-```
-#include <SoftwareSerial.h>
-
-SoftwareSerial mySerial(2, 3); // RX, TX
-String deviceName = "Small ficus"; // Укажите название вашего растения
-
-void setup() {
-  mySerial.begin(9600);
-  mySerial.setTimeout(500);
-  Serial.begin(9600);
-  configureDevice();
-}
-
-void loop() {
-  char c;
-  if (Serial.available()) {
-    c = Serial.read();
-    mySerial.print(c);
-  }
-  if (mySerial.available()) {
-    c = mySerial.read();
-    Serial.print(c);    
-  }
-}
-
-void configureDevice() {
-  sendCommand("AT");
-  sendCommand("AT+VERSION");
-  sendCommand("AT+LADDR"); 
-  sendCommand("AT+RENEW"); 	// restore default settings
-  sendCommand(String("AT+NAME").concat(deviceName)); 
-  sendCommand("AT+ROLE0"); 	// slave mode
-  sendCommand("AT+TYPE0"); 	// unsecure, no pin required
-  sendCommand("AT+POWE3"); 	// max RF power
-  sendCommand("AT+UUID0xFFE0");
-  sendCommand("AT+CHAR0xFFE1");
-  sendCommand("AT+PWRM0"); 	// auto-sleep
-  sendCommand("AT+RESET"); 	// reboot to apply settings
-}
-
-void sendCommand(const char * data) {
-  Serial.println(data);
-  mySerial.println(data);
-  while(mySerial.available()) {
-    Serial.println(mySerial.readStringUntil('\n'));
-  }
-  delay(20);
-}
-```
+Для программирования модулей вам потребуется установить Arduino IDE. Для программирования платы DigiSpark ATTiny85 нужно будет установить дополнительные драйверы и библиотеки, подробно это описано [здесь](http://digistump.com/wiki/digispark/tutorials/connecting), также советуем почитать об особенностях работы с этими модулями [здесь](https://medium.com/@evgeny.savitsky/%D0%BE%D1%81%D0%B2%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-attiny85-%D0%B8-lilypad-digispark-%D0%B2-%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%BE%D1%81%D1%82%D0%B8-c6e955957d53).
 
 Переключите Arudino IDE для работы с DigiSpark устройствами. Запрограммируйте модуль ATTiny85 с использованием кода:
 ```
@@ -106,42 +50,69 @@ void sendCommand(const char * data) {
 
 #define SENSOR_VCC_PIN PB0
 #define SENSOR_DATA_PIN A2
-#define RF_LED_PIN PB2
 #define TX_PIN PB1
 #define RX_PIN PB4
+#define BLE_BAUD 9600
+#define TX_DELAY 150
+#define readInterval 3600
+
+volatile int seconds = readInterval;
 
 void setup() {
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  initializeWatchdogTimer(WDTO_4S);
+  initializeWatchdogTimer(WDTO_8S);
+  setupPins();
+  configureBLEDevice(0, 0);
 }
 
 void loop() {
   // prepearing for sleep
-  setupPins();
   adc_disable();
   power_all_disable();
   sleep_mode();
 
-  // wait for LED pin on BLE is ON
-  if ( digitalRead(RF_LED_PIN) == LOW ) return;
-  
-  // wake up after high level on INTERRUPT_PIN
+  if ( seconds < readInterval ) return;
+  seconds = 0; 
+
+  // wake up each hour
   power_all_enable();
   adc_enable();
-
+  
   digitalWrite(SENSOR_VCC_PIN, HIGH); // turn on sensor VCC
-  SoftSerial mySerial(RX_PIN, TX_PIN); // RX, TX (RX is not used)
-  mySerial.begin(9600);
+  delay(TX_DELAY * 2);
+  int sensorValue = analogRead(SENSOR_DATA_PIN);
+  setupPins();
 
   // send sensor data over UART
-  for( int retry = 0; retry < 2; retry++ ) {
-    int sensorValue = analogRead(SENSOR_DATA_PIN);
-    mySerial.write(sensorValue >> 8);
-    mySerial.write(sensorValue & 0xFF);
-    mySerial.write(13);
-    mySerial.write(10);
-    delay(200);
-  }
+  configureBLEDevice(sensorValue, 0);
+}
+
+void configureBLEDevice(int major, int minor) 
+{ 
+  SoftSerial bleSerial(RX_PIN, TX_PIN); // RX, TX
+  bleSerial.begin(BLE_BAUD);
+  
+  sendCommand(&bleSerial, "AT"); // restore default settings
+  sendCommand(&bleSerial, "AT+RENEW"); // restore default settings
+  sendCommand(&bleSerial, "AT+ROLE0"); // slave mode
+  sendCommand(&bleSerial, "AT+TYPE0"); // unsecure, no pin required
+  sendCommand(&bleSerial, "AT+POWE3"); // max RF power
+
+  char buffer[64] = "";
+  sprintf(buffer, "AT+MARJ0x%04X\r\n", major);
+  sendCommand(&bleSerial, buffer);
+  sprintf(buffer, "AT+MINO0x%04X\r\n", minor);
+  sendCommand(&bleSerial, buffer);
+  
+  sendCommand(&bleSerial, "AT+ADVI9"); // long advertising interval
+  sendCommand(&bleSerial, "AT+PWRM0"); // auto-sleep
+  sendCommand(&bleSerial, "AT+IBEA1"); // iBeacon mode
+  sendCommand(&bleSerial, "AT+RESET");
+}
+
+void sendCommand(SoftSerial * bleSerial, const char * data) {
+  delay(TX_DELAY);
+  bleSerial->println(data);
 }
 
 void initializeWatchdogTimer(byte sleep_time)
@@ -153,6 +124,7 @@ void initializeWatchdogTimer(byte sleep_time)
 
 ISR(WDT_vect) {
   WDTCR |= _BV(WDIE);
+  seconds += 8;
 }
 
 void setupPins()
@@ -172,12 +144,9 @@ void setupPins()
 
 Вкратце, что тут вообще происходит:
 
-1. Модуль BLE CC41-A стартует и переходит в спящий режим (потребление 0.6мА)
-2. Модуль ATTiny85 стартует и переходит в спящий режим (потребление 0.4мА)
-3. При подключении HASS к BLE CC41-A он просыпается, на его LED-пине устанавливается логическая 1
-4. ATTiny85 периодически отслеживает состояние BLE CC41-A и, когда обнаруживает его в состоянии подключенности по Bluetooth, подает напряжение на модуль датчика влажности, считывает показания с датчика влажности и передает их CC41-A по UART-интерфейсу.
-5. CC41-A передает через Bluetooth LE полученные данные, HASS считывает это событие и использует полученные данные как показания датчика влажности.
-6. После обрыва Bluetooth-подключения оба модуля засыпают, пока опять не будет установлено подключение по Bluetooth LE.
+1. Модуль ATTiny85 стартует, конфигурирует BLE для работы в режиме iBeacon, то есть переключает в широковещательный режим работы, затем переходит в спящий режим.
+2. Раз в час микроконтроллер подает напряжение на модуль датчика влажности, считывает показания с датчика влажности и передает их CC41-A по UART-интерфейсу.
+3. CC41-A периодически передает через Bluetooth LE полученные данные, HASS считывает их и использует полученные данные как показания датчика влажности.
 
 # Схема устройства
 
