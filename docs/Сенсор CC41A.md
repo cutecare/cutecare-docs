@@ -261,3 +261,4 @@ alert:
 1. [Введение в использование BLE-модуля](https://medium.com/@yostane/using-the-at-09-ble-module-with-the-arduino-3bc7d5cb0ac2)
 2. [Спецификация модуля CC41-A](http://img.banggood.com/file/products/20150104013145BLE-CC41-A%20Spefication.pdf)
 3. [Перечень команд, поддерживаемых модулем](http://4ipov.net/bluetooth_4.0_BLE_module_CC2541_CC41-A)
+4. [Переключение в режим iBeacon](https://rememberdontsearch.wordpress.com/2017/04/19/ble-cc41-a-hm10-clone-ibeacon/)
