@@ -54,9 +54,9 @@
 #define RX_PIN PB4
 #define BLE_BAUD 9600
 #define TX_DELAY 150
-#define readInterval 3600
+#define MEASURE_INTERVAL 3600
 
-volatile int seconds = readInterval;
+volatile int seconds = MEASURE_INTERVAL;
 
 void setup() {
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
@@ -71,14 +71,15 @@ void loop() {
   power_all_disable();
   sleep_mode();
 
-  if ( seconds < readInterval ) return;
+  if ( seconds < MEASURE_INTERVAL ) return;
   seconds = 0; 
 
   // wake up each hour
   power_all_enable();
   adc_enable();
   
-  digitalWrite(SENSOR_VCC_PIN, HIGH); // turn on sensor VCC
+  // turn on sensor VCC and read value
+  digitalWrite(SENSOR_VCC_PIN, HIGH); 
   delay(TX_DELAY * 2);
   int sensorValue = analogRead(SENSOR_DATA_PIN);
   setupPins();
@@ -92,7 +93,7 @@ void configureBLEDevice(int major, int minor)
   SoftSerial bleSerial(RX_PIN, TX_PIN); // RX, TX
   bleSerial.begin(BLE_BAUD);
   
-  sendCommand(&bleSerial, "AT"); // restore default settings
+  sendCommand(&bleSerial, "AT");
   sendCommand(&bleSerial, "AT+RENEW"); // restore default settings
   sendCommand(&bleSerial, "AT+ROLE0"); // slave mode
   sendCommand(&bleSerial, "AT+TYPE0"); // unsecure, no pin required
