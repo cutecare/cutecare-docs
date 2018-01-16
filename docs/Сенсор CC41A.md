@@ -53,7 +53,7 @@
 #define TX_PIN PB1
 #define RX_PIN PB4
 #define BLE_BAUD 9600
-#define TX_DELAY 150
+#define TX_DELAY 200
 #define MEASURE_INTERVAL 3600
 
 volatile int seconds = MEASURE_INTERVAL;
