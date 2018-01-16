@@ -10,11 +10,11 @@
 
 |Название|Назначение|Цена, руб.|
 | :----------- |:----------- |:----------- |
-|BLE CC41-A|Радиомодуль Bluetooth LE|150|
-|Digispark ATTiny85|Микроконтроллер для снятия показаний датчика|80|
-|YL-38|Датчик влажности почвы, например, [такой](https://www.ebay.com/itm/5PCS-Soil-Hygrometer-Detection-Module-Soil-Moisture-Sensor-For-arduino-Smart-car/400385860375?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649)|40|
-|Breadboard 170|Небольшая макетка для компоновки модулей датчика|30|
-|Держатель батареек 2x AAA|Питание датчика|80|
+|[BLE CC41-A](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FArduino-Android-IOS-HM-10-BLE-Bluetooth-4-0-CC2540-CC2541-Serial-Wireless-Module%2F311567433651%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Радиомодуль Bluetooth LE|150|
+|[Digispark ATTiny85](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FDigispark-Kickstarter-Attiny85-USB-Development-Board-for-arduino-NEW%2F311076127758%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Микроконтроллер для снятия показаний датчика|80|
+|[YL-38](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2F5PCS-Soil-Hygrometer-Detection-Module-Soil-Moisture-Sensor-For-arduino-Smart-car%2F400385860375%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Датчик влажности почвы, например, [такой](https://www.ebay.com/itm/5PCS-Soil-Hygrometer-Detection-Module-Soil-Moisture-Sensor-For-arduino-Smart-car/400385860375?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649)|40|
+|[Breadboard 170](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2F5-Color-Mini-Solderless-Prototype-Breadboard-170-Tie-points-For-Arduino-Shield%2F201677166530%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Небольшая макетка для компоновки модулей датчика|30|
+|[Держатель батареек 2x AAA](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2F2PCS-2-AAA-3V-Battery-Holder-Box-Case-with-cover-switch-wire-2xAAA-2x1-5V-SF607%2F302586191345%3Fhash%3Ditem46738addf1%3Ag%3ALnMAAOxy3yNTfFIP)|Питание датчика|80|
 
 Итоговая стоимость: 380 руб - это в два раза дешевле, чем скромный букет цветов. Также вам потребуются перемычки.
 
@@ -231,3 +231,4 @@ alert:
 2. [Спецификация модуля CC41-A](http://img.banggood.com/file/products/20150104013145BLE-CC41-A%20Spefication.pdf)
 3. [Перечень команд, поддерживаемых модулем](http://4ipov.net/bluetooth_4.0_BLE_module_CC2541_CC41-A)
 4. [Переключение в режим iBeacon](https://rememberdontsearch.wordpress.com/2017/04/19/ble-cc41-a-hm10-clone-ibeacon/)
+5. [Открытая платформа для создания заботливого умного дома](http://cutecare.ru)
