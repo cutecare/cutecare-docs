@@ -160,6 +160,7 @@ void setupPins()
 sensor:
   - platform: cutecare
     mac: <укажите тут адрес вашего BLE-модуля>
+    scan_interval: 3600
     monitored_conditions:
       - moisture
     name: plant1
