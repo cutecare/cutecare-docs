@@ -8,11 +8,11 @@
 
 |Название|Назначение|Цена, руб.|
 | :----------- |:----------- |:----------- |
-|BLE JDY-08|Радиомодуль Bluetooth LE|140|
-|HC-SR505|Мини-датчик движения инфракрасный|75|
-|Digispark ATTiny85|Микроконтроллер для снятия показаний датчика движения|80|
-|Breadboard 170|Небольшая макетка для компоновки модулей датчика|30|
-|Держатель батареек 3x AAA|Питание датчика 4.5В|30|
+|[BLE JDY-08](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FBluetooth-4-0-BLE-Low-Power-CC2541-JDY-08-Support-Airsync-iBeacon-Module%2F322511962233%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Радиомодуль Bluetooth LE|140|
+|[HC-SR505](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FHC-SR501-SR04-SR505-Mini-PIR-Infrarot-Sensor-Module-forArduino-Raspberry-Pi%2F401232752070%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26var%3D670821966681%26_trksid%3Dp2057872.m2749.l2649)|Мини-датчик движения инфракрасный|75|
+|[Digispark ATTiny85](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FDigispark-Kickstarter-Attiny85-USB-Development-Board-for-arduino-NEW%2F311076127758%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Микроконтроллер для снятия показаний датчика движения|80|
+|[Breadboard 170](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2F5-Color-Mini-Solderless-Prototype-Breadboard-170-Tie-points-For-Arduino-Shield%2F201677166530%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Небольшая макетка для компоновки модулей датчика|30|
+|[Держатель батареек 3x AAA](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2F2-3-4xAAA-Battery-Holder-Plastic-Batteries-Box-Battery-Storage-Case-With-Wire-TS%2F152748115174%3Fhash%3Ditem23907f44e6%3Am%3AmR_En8kk8yOo9vvMl-QhG0g)|Питание датчика 4.5В|30|
 
 Итоговая стоимость: 355 руб - это в три раза дешевле, чем готовый китайский датчик движения.
 Также вам потребуются перемычки для соединения модулей.
@@ -216,3 +216,4 @@ kitchen:
 2. [Оригинальная спецификация на модуль и прошивку (англ.)](https://fccid.io/2AM2YJDY-08/User-Manual/User-Manual-3511895.pdf)
 3. [Утилита для считывания параметров iBeacon](http://developer.radiusnetworks.com/ibeacon/idk/ibeacon_scan)
 4. [Описание формата данных iBeacon](https://kvurd.com/blog/tilt-hydrometer-ibeacon-data-format/)
+5. [Открытая платформа для создания заботливого умного дома](http://cutecare.ru)
