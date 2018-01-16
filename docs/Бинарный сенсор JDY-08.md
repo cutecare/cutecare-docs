@@ -12,7 +12,7 @@
 |[HC-SR505](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FHC-SR501-SR04-SR505-Mini-PIR-Infrarot-Sensor-Module-forArduino-Raspberry-Pi%2F401232752070%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26var%3D670821966681%26_trksid%3Dp2057872.m2749.l2649)|Мини-датчик движения инфракрасный|75|
 |[Digispark ATTiny85](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FDigispark-Kickstarter-Attiny85-USB-Development-Board-for-arduino-NEW%2F311076127758%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Микроконтроллер для снятия показаний датчика движения|80|
 |[Breadboard 170](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2F5-Color-Mini-Solderless-Prototype-Breadboard-170-Tie-points-For-Arduino-Shield%2F201677166530%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Небольшая макетка для компоновки модулей датчика|30|
-|[Держатель батареек](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2F5PC-Case-Box-Battery-Holder-CR2032-Button-Coin-Cell-6V-ON-OFF-Switch-White-Black%2F202105731635%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26var%3D502098711296%26_trksid%3Dp2057872.m2749.l2649)|Питание датчика 5В|30|
+|[Держатель батареек](https://www.ebay.com/itm/2xBlack-Plastic-Battery-Storage-Case-Box-Holder-for-4xAAA-1-5V-with-wire-2-layer/252377887792?hash=item3ac2e4f430:g:6SAAAOSwYmZXJx5G)|Питание датчика 5В|30|
 
 Итоговая стоимость: 355 руб - это в три раза дешевле, чем готовый китайский датчик движения.
 Также вам потребуются перемычки для соединения модулей.
@@ -24,7 +24,7 @@
 ![Умный датчик движения](https://github.com/cutecare/cutecare-docs/blob/master/images/MotionDetectorSensor.jpg?raw=true)
 
 Располагайте датчик движения с учетом того, что он отслеживает движение на расстоянии 4-5 метров. 
-В режиме ожидания датчик потребляет около 1мА, так что батареек должно хватить на продолжительную работу устройства.
+В режиме ожидания датчик потребляет около 3мА, так что батареек должно хватить на продолжительную работу устройства. Питание 5В необходимо для устойчивой работы датчика движения. Иначе можно было бы обойтись 2-мя элементами питания.
 
 # Программирование
 
@@ -45,29 +45,24 @@
 #define BLE_PIN PB0
 #define TX_PIN PB1
 #define SWITCH_PIN PB2
-#define TX_DELAY 150
+#define TX_DELAY 200
 
 int wasState = LOW;
 
 void setup() 
 {
   setupPins();
-  configureBLEDevice();
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   initializeWatchdogTimer(WDTO_1S);
-}
 
-void disableModules()
-{
-  adc_disable();
-  PRR &= ~_BV(PRADC);
-  PRR &= ~_BV(PRUSI);
-  power_all_disable();
+  configureBLEDevice();
 }
 
 void loop() 
 {
-  disableModules();
+  setupPins();
+  adc_disable();
+  power_all_disable();
   sleep_mode();
 
   int nowState = digitalRead(SWITCH_PIN);
@@ -75,31 +70,42 @@ void loop()
   wasState = nowState;
 
   power_all_enable();
-
-  digitalWrite(BLE_PIN, LOW); // wake up BLE to enable UART
-  delay(TX_DELAY);
-  setupPins();
+  wakeupBLE();
 
   SoftSerial bleSerial(PB4, TX_PIN); // RX, TX
   bleSerial.begin(115200);
   sendCommand(&bleSerial, nowState == HIGH ? "AT+MAJOR0001" : "AT+MAJOR0000");
   sendCommand(&bleSerial, "AT+SLEEP1");
+  delay(TX_DELAY);
 }
 
 void configureBLEDevice() 
 { 
+  wakeupBLE();
+
   SoftSerial bleSerial(PB4, TX_PIN); // RX, TX
   bleSerial.begin(115200);
   
-  sendCommand(&bleSerial, "AT+RST");
-  sendCommand(&bleSerial, "AT+HOSTEN3");
+  sendCommand(&bleSerial, "AT+RESTORE");
+  sendCommand(&bleSerial, "AT+NAMEMotionJDY-08"); 
+  sendCommand(&bleSerial, "AT+STRUUID686DF1642351471E9F4167F0B2E5EABE"); // this UUID should be unique per device
+  sendCommand(&bleSerial, "AT+HOSTEN3");    // app transparent mode
+  sendCommand(&bleSerial, "AT+CLSSE0");     // iBeacon mode
+  sendCommand(&bleSerial, "AT+RST");        // apply settings
   sendCommand(&bleSerial, "AT+POWR0");      // max RF power
   sendCommand(&bleSerial, "AT+ADVEN1");     // advertising enabled
   sendCommand(&bleSerial, "AT+ADVIN1");     // setup advertising interval
-  sendCommand(&bleSerial, "AT+MAJOR0000");  // switch initial state is off
   sendCommand(&bleSerial, "AT+PWMOPEN0");   // turn off PWM
   sendCommand(&bleSerial, "AT+RTCOPEN0");   // disable RTC
+  sendCommand(&bleSerial, "AT+MAJOR0000");  // switch initial state is off
   sendCommand(&bleSerial, "AT+SLEEP1");     // power down mode + advertising
+}
+ 
+void wakeupBLE()
+{
+  digitalWrite(BLE_PIN, HIGH);
+  delay(100);
+  digitalWrite(BLE_PIN, LOW);
 }
 
 void sendCommand(SoftSerial * bleSerial, const char * data) {
@@ -121,15 +127,12 @@ ISR(WDT_vect) {
 void setupPins()
 {
   pinMode(BLE_PIN, OUTPUT); 
-  digitalWrite(BLE_PIN, HIGH);
+  digitalWrite(BLE_PIN, LOW);
   pinMode(TX_PIN, OUTPUT);
   digitalWrite(TX_PIN, LOW);
-  pinMode(A1,INPUT);
-  analogWrite(A1, 0);
+  pinMode(A1,INPUT);  
   pinMode(A2,INPUT);
-  analogWrite(A2, 0);
   pinMode(A3,INPUT);
-  analogWrite(A3, 0);
 }
 ```
 
