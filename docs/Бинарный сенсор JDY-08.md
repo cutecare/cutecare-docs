@@ -45,7 +45,7 @@
 #define BLE_PIN PB0
 #define TX_PIN PB1
 #define SWITCH_PIN PB2
-#define TX_DELAY 125
+#define TX_DELAY 150
 
 int wasState = LOW;
 
@@ -60,14 +60,13 @@ void setup()
 void disableModules()
 {
   adc_disable();
-  power_all_disable();
   PRR &= ~_BV(PRADC);
   PRR &= ~_BV(PRUSI);
+  power_all_disable();
 }
 
 void loop() 
 {
-  setupPins();
   disableModules();
   sleep_mode();
 
@@ -79,7 +78,7 @@ void loop()
 
   digitalWrite(BLE_PIN, LOW); // wake up BLE to enable UART
   delay(TX_DELAY);
-  digitalWrite(BLE_PIN, HIGH);
+  setupPins();
 
   SoftSerial bleSerial(PB4, TX_PIN); // RX, TX
   bleSerial.begin(115200);
@@ -92,7 +91,6 @@ void configureBLEDevice()
   SoftSerial bleSerial(PB4, TX_PIN); // RX, TX
   bleSerial.begin(115200);
   
-  sendCommand(&bleSerial, "AT");
   sendCommand(&bleSerial, "AT+RST");
   sendCommand(&bleSerial, "AT+HOSTEN3");
   sendCommand(&bleSerial, "AT+POWR0");      // max RF power
@@ -107,10 +105,6 @@ void configureBLEDevice()
 void sendCommand(SoftSerial * bleSerial, const char * data) {
   delay(TX_DELAY);
   bleSerial->print(data);
-  delay(20);
-  while(bleSerial->available()) {
-    bleSerial->read();
-  }
 }
 
 void initializeWatchdogTimer(byte sleep_time)
@@ -130,9 +124,12 @@ void setupPins()
   digitalWrite(BLE_PIN, HIGH);
   pinMode(TX_PIN, OUTPUT);
   digitalWrite(TX_PIN, LOW);
-  pinMode(SWITCH_PIN,INPUT);  
+  pinMode(A1,INPUT);
+  analogWrite(A1, 0);
   pinMode(A2,INPUT);
+  analogWrite(A2, 0);
   pinMode(A3,INPUT);
+  analogWrite(A3, 0);
 }
 ```
 
