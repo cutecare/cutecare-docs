@@ -10,9 +10,9 @@
 
 |Название|Назначение|Цена, руб.|
 | :----------- |:----------- |:----------- |
-|BLE JDY-08|Радиомодуль Bluetooth LE|140|
-|Hi-Link HLK PM-03 3.3V|Изолированный модуль питания 3.3В|150|
-|Songle SRD-03VDC-SL-C|Реле управления нагрузкой до 10А|80|
+|[BLE JDY-08](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FBluetooth-4-0-BLE-Low-Power-CC2541-JDY-08-Support-Airsync-iBeacon-Module%2F322511962233%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Радиомодуль Bluetooth LE|140|
+|[Hi-Link HLK PM-03 3.3V](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2FHLK-PM03-AC-DC-220V-to-3-3V-Step-Down-Buck-Isolated-Power-Supply-Module%2F311759562967%3FssPageName%3DSTRK%253AMEBIDX%253AIT%26_trksid%3Dp2057872.m2749.l2649)|Изолированный модуль питания 3.3В|150|
+|[Songle SRD-03VDC-SL-C](https://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_id=114&ipn=icep&toolid=20004&campid=5338218090&mpre=https%3A%2F%2Fwww.ebay.com%2Fitm%2F1pcs-SRD-03VDC-SL-C-3V-DC-SONGLE-Power-Relay-SRD-03VDC-SL-C-PCB-Type-SPDT%2F262337740956%3Fhash%3Ditem3d148c409c%3Ag%3AJyIAAOSwh-1W6Skv)|Реле управления нагрузкой до 10А|80|
 |Розетка|Электрический разветвитель (двойник или тройник)|60|
 
 Итоговая стоимость: 430 руб - это в два раза дешевле, чем самая дешевая умная розетка, кроме Sonoff конечно.
@@ -148,3 +148,4 @@ hall:
 2. [Оригинальная спецификация на модуль и прошивку (англ.)](https://fccid.io/2AM2YJDY-08/User-Manual/User-Manual-3511895.pdf)
 3. [Утилита для считывания параметров iBeacon](http://developer.radiusnetworks.com/ibeacon/idk/ibeacon_scan)
 4. [Описание формата данных iBeacon](https://kvurd.com/blog/tilt-hydrometer-ibeacon-data-format/)
+5. [Открытая платформа для создания заботливого умного дома](http://cutecare.ru)
