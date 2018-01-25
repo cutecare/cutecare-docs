@@ -1,4 +1,4 @@
-site_name: Cute Care
+site_name: Конструктор домашней автоматизации и умной квартиры
 docs_dir: docs
 pages:
     - 'Начало': 'index.md'
