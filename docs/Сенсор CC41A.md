@@ -36,9 +36,7 @@
 
 # Программирование
 
-Для программирования вам потребуется установить Arduino IDE. Для программирования платы DigiSpark ATTiny85 нужно будет установить дополнительные драйверы и библиотеки, подробно это описано [здесь](http://digistump.com/wiki/digispark/tutorials/connecting), также советуем почитать об особенностях работы с этими модулями [здесь](https://medium.com/@evgeny.savitsky/%D0%BE%D1%81%D0%B2%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-attiny85-%D0%B8-lilypad-digispark-%D0%B2-%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%BE%D1%81%D1%82%D0%B8-c6e955957d53).
-
-Переключите Arudino IDE для работы с DigiSpark устройствами. Запрограммируйте модуль ATTiny85 с использованием кода:
+Подготовьте рабочее место для работы с DigiSpark ATTiny85 по [этой инструкции](http://cutecare.readthedocs.io/ru/master/%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D1%8B/) и запрограммируйте модуль ATTiny85 с использованием кода:
 ```
 #include <SoftSerial.h>
 #include <avr/sleep.h>      
