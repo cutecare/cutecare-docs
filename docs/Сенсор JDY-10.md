@@ -48,55 +48,78 @@
 
 unsigned int lastPressure = 0;
 unsigned int lastTemperature = 0;
+int secondsPassed = 0;
 
-void setup() {
+void setup() 
+{
+  // configure BLE device
   pinMode(BLE_PIN, OUTPUT);
   pinMode(TX_PIN, OUTPUT);
 
-  SoftwareSerial bleSerial(RX_PIN, TX_PIN);
-  bleSerial.begin(BLE_BAUD);
-  configureDevice(&bleSerial);
+  SoftwareSerial serial(RX_PIN, TX_PIN);
+  serial.begin(BLE_BAUD);
+
+  sendCommand(&serial, "AT+DEFAULT");
+  sendCommand(&serial, "AT+RESET");
+  delay(300);
+  sendCommand(&serial, "AT+NAMECLM-TLS-01");
+  sendCommand(&serial, "AT+POWE0");
+  sendCommand(&serial, "AT+ADVINT4");
+  sendCommand(&serial, "AT+CLSSA0");
+
+  measureValues(&lastPressure, &lastTemperature);
+  sendSensorData(&serial, lastPressure, lastTemperature, false);
 }
 
 void loop() 
 {
-  clearPins();
+  // prepare for sleep, clear pins
+  pinMode(TX_PIN, INPUT);
+  pinMode(BLE_PIN, INPUT);
+  pinMode(A4, INPUT); // SDA
+  pinMode(A5, INPUT); // SCL
   LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+
+  // check if 5 minutes have passed
+  secondsPassed += 8;
+  if ( secondsPassed < 300 ) return;
+  secondsPassed = 0;
+
+  // measure sensor value
   delay(200);
 
   unsigned int nowPressure = 0;
   unsigned int nowTemperature = 0;
   measureValues(&nowPressure, &nowTemperature);
-
   if ( nowPressure == lastPressure && nowTemperature == lastTemperature ) return;
 
+  // configure BLE if sensor values have changed since the last measure
   lastPressure = nowPressure;
   lastTemperature = nowTemperature;
 
-  char buff[32] = "";
-  unsigned int value = nowPressure << 6;
-  value += nowTemperature;
-  sprintf(buff, "AT+CHRUUID%04X", value);
-
-  wakeUpBLE();
   SoftwareSerial bleSerial(RX_PIN, TX_PIN);
   bleSerial.begin(BLE_BAUD);
-  sendCommand(&bleSerial, buff);
-  sendCommand(&bleSerial, buff);
-  sendCommand(&bleSerial, "AT+SLEEP1");
+  sendSensorData(&bleSerial, lastPressure, lastTemperature, true);
 }
 
-void clearPins() {
-  pinMode(TX_PIN, INPUT);
-  pinMode(BLE_PIN, INPUT);
-}
+void sendSensorData( SoftwareSerial * bleSerial, int pressure, int temperature, bool wakeUp ) 
+{
+  char buff[32] = "";
+  unsigned int value = pressure << 6;
+  value += temperature;
+  sprintf(buff, "AT+CHRUUID%04X", value);
 
-void wakeUpBLE() {
-  pinMode(TX_PIN, OUTPUT);
-  pinMode(BLE_PIN, OUTPUT);
-  digitalWrite(BLE_PIN, LOW);
-  delay(800);
-  pinMode(BLE_PIN, INPUT);
+  if ( wakeUp ) { // wake up BLE if required
+    pinMode(TX_PIN, OUTPUT);
+    pinMode(BLE_PIN, OUTPUT);
+    digitalWrite(BLE_PIN, LOW);
+    delay(800);
+    pinMode(BLE_PIN, INPUT);
+  }
+
+  sendCommand(bleSerial, buff);
+  sendCommand(bleSerial, buff);
+  sendCommand(bleSerial, "AT+SLEEP1");
 }
 
 void measureValues(unsigned int * pressure, unsigned int * temperature) 
@@ -108,19 +131,6 @@ void measureValues(unsigned int * pressure, unsigned int * temperature)
   *temperature = sensor.getTemperature();
 }
 
-void configureDevice(SoftwareSerial * serial) 
-{
-  sendCommand(serial, "AT+DEFAULT");
-  sendCommand(serial, "AT+RESET");
-  delay(300);
-  sendCommand(serial, "AT+NAMECLM-TLS-01");
-  sendCommand(serial, "AT+CHRUUIDBA93");
-  sendCommand(serial, "AT+POWE0");
-  sendCommand(serial, "AT+ADVINT4");
-  sendCommand(serial, "AT+CLSSA0");
-  sendCommand(serial, "AT+SLEEP1");
-}
-
 void sendCommand(SoftwareSerial * bleSerial, const char * data) {
   delay(200);
   bleSerial->println(data);
@@ -130,7 +140,7 @@ void sendCommand(SoftwareSerial * bleSerial, const char * data) {
 Итак, по порядку:
 
 1. Pro Mini стартует, конфигурирует BLE для работы в режиме iBeacon, дает ему имя CLM-TLS-01, погружает в спящий режим и сам засыпает.
-2. Каждые 8 секунд микроконтроллер просыпается, снимает показания с датчика и, если они изменились по сравнению с предыдущими значениями, настраивает BLE-модуль на передачу этих значений.
+2. Каждые 5 минут микроконтроллер просыпается, снимает показания с датчика и, если они изменились по сравнению с предыдущими значениями, настраивает BLE-модуль на передачу этих значений.
 3. BLE-модуль периодически рассылает настройки, HASS считывает их и использует как показания датчиков температуры и давления.
 
 # Схема устройства
