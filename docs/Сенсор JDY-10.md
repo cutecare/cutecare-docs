@@ -145,7 +145,7 @@ void sendCommand(SoftwareSerial * bleSerial, const char * data) {
 
 # Схема устройства
 
-![схема]()
+![схема](https://github.com/cutecare/cutecare-docs/blob/master/images/ProMini-TLS-MPL_bb.png?raw=true)
 
 # Настройка HASS
 
