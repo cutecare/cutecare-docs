@@ -11,10 +11,7 @@
 На базе самодельной инфраструктуры и коммерческих продуктов, с использованием широчайших возможностей свободного ПО и готовых интернет-сервисов, вы можете самостояльно запрограммировать действительно умные сценарии, с использованием современных наработок в части AR, ML и пр. Запрограммируйте вашу "умную" квартиру или дом так, чтобы это отвечало именно вашим интересам и задачам.
 
 .. raw:: html
-
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe src="//youtube.com/watch?v=TaoQCxtTq6c#t=248m17s" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;"><iframe src="//youtube.com/watch?v=TaoQCxtTq6c#t=248m17s" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
     
 # Помощь сообществу
 
