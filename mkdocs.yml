@@ -1,5 +1,5 @@
 site_name: Конструктор домашней автоматизации и умной квартиры
-theme: default
+theme: readthedocs
 docs_dir: docs
 pages:
 - 'Сообщество': 'index.md'
